@@ -71,6 +71,47 @@ body{background:#DCD4D7;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;
 .sexbar button{background:none;border:0;font-family:inherit;font-size:13px;font-weight:600;
   color:var(--ink2);padding:10px 4px;border-radius:10px;cursor:pointer}
 .sexbar button.on{background:var(--brand);color:#fff}
+.navw{width:112px;height:112px;margin:4px auto 10px;display:block}
+.plc{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.plc:last-child{border:0}
+.plc .ar{width:40px;height:40px;border-radius:50%;background:var(--brand-l);flex:none;position:relative}
+.plc .ar::after{content:'';position:absolute;inset:0;margin:auto;width:0;height:0;
+  border-style:solid;border-width:0 6px 15px 6px;border-color:transparent transparent var(--brand) transparent;
+  transform-origin:50% 70%}
+.plc .nm{font-size:15px;font-weight:600}
+.plc .ds{font-size:12.5px;color:var(--mute);margin-top:2px}
+.plc .ms{margin-inline-start:auto;font-weight:700;color:var(--brand);font-size:14px;flex:none}
+.doc{background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px;
+  max-height:230px;overflow:hidden;position:relative;font-size:13.5px;line-height:1.9;color:var(--ink2)}
+.doc::after{content:'';position:absolute;inset:auto 0 0 0;height:60px;
+  background:linear-gradient(transparent,#fff)}
+.doc h5{font-size:15px;color:var(--ink);margin:0 0 8px;font-weight:700}
+.doc p{margin:0 0 9px}
+.prg{height:5px;background:var(--line);border-radius:99px;overflow:hidden;margin:10px 0 12px}
+.prg i{display:block;height:100%;background:var(--brand);width:0;transition:width .5s}
+.sig{border:2px dashed var(--brand-b);border-radius:14px;height:120px;background:#FCFAFB;
+  display:grid;place-items:center;color:var(--mute);font-size:14px;position:relative;overflow:hidden}
+.sig.on{border-style:solid;border-color:var(--ok);background:var(--ok-l)}
+.sig svg{position:absolute;inset:0;width:100%;height:100%}
+.stamp{display:flex;align-items:center;gap:12px;background:var(--brand-l);border:1px solid var(--brand-b);
+  border-radius:14px;padding:13px}
+.stamp .sl{width:44px;height:44px;border-radius:50%;border:2px solid var(--brand);display:grid;
+  place-items:center;flex:none}
+.stamp .sl img{width:24px}
+.otp{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:12px 0}
+.otp b{background:#fff;border:1px solid var(--line);border-radius:12px;padding:15px 0;text-align:center;
+  font-size:22px;font-weight:700;color:var(--brand)}
+.miss{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid var(--line)}
+.miss:last-child{border:0}
+.miss .dt2{width:9px;height:9px;border-radius:50%;background:var(--bad);flex:none}
+.miss .t3{font-size:15px;font-weight:600}
+.miss .go{margin-inline-start:auto;color:var(--brand);font-weight:600;font-size:13px}
+.livebox{background:linear-gradient(160deg,#B48A3C,#7E5E14);color:#fff;border-radius:16px;padding:16px;margin-bottom:11px}
+.livebox .k{font-size:12px;opacity:.82}
+.livebox .v{font-size:22px;font-weight:700;margin-top:4px}
+.livebox .s{font-size:13px;opacity:.88;margin-top:5px;line-height:1.6}
+.coord{background:rgba(255,255,255,.16);border-radius:10px;padding:9px 11px;margin-top:11px;
+  font-size:13px;direction:ltr;text-align:center;font-weight:600;letter-spacing:.02em}
 .rolebar{display:flex;gap:7px;background:#F0ECEE;border-radius:14px;padding:5px;margin-bottom:12px}
 .rolebar button{flex:1;background:none;border:0;font-family:inherit;font-size:13px;font-weight:600;
   color:var(--ink2);padding:10px 4px;border-radius:10px;cursor:pointer}
@@ -86,6 +127,7 @@ body{background:#DCD4D7;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;
   display:grid;place-items:center;font-weight:700;font-size:14px;flex:none}
 .pax .av.ok{background:var(--ok-l);color:var(--ok)}
 .pax .av.no{background:var(--bad-l);color:var(--bad)}
+.pax .av.n2{background:#F2F0F1;color:#A79BA0}
 .pax .nm{font-size:15px;font-weight:600}
 .pax .ph{font-size:12.5px;color:var(--mute);margin-top:2px;direction:ltr;text-align:right}
 .pax .acts{margin-inline-start:auto;display:flex;gap:6px;flex:none}
@@ -348,7 +390,8 @@ setInterval(tick,1000);
 
 /* ---------- roles & operational data ---------- */
 let ROLE='pilgrim';
-let SEX='m';                      /* m = حاج · f = حاجة */
+let SEX='m';
+let ASCOPE='all';   /* نطاق الإداري: all | m | f */                      /* m = حاج · f = حاجة */
 const ME=()=>SEX==='m'
  ? {nm:'عبدالله محمد الكواري',ini:'ع',ttl:'حاج',bus:'باص ٧',sup:'سعد العتيبي',supP:'+974 5090 1297',
     room:'٣١٢',roomNote:'غرفة عائلية · مع زوجتك',tent:'خيمة الرجال ١٤',tentNote:'منى · المنطقة ٣'}
@@ -390,12 +433,24 @@ const PAX=[
  {n:'فهد الدوسري',p:'+974 3399 4455',s:'ok',seat:'27'},
  {n:'عيسى النعيمي',p:'+974 6612 3390',s:'ok',seat:'31'},
 ];
+const PLACES=[
+ {n:'فندق دار النور',d:'سكنك · مكة',m:'٦٥٠ م',deg:112,k:'home'},
+ {n:'نقطة تجمع باص ٧',d:'أمام الفندق',m:'٤٠ م',deg:200,k:'bus'},
+ {n:'المسجد الحرام',d:'باب الملك عبدالعزيز',m:'٦٥٠ م',deg:293,k:'home'},
+ {n:'مخيم الحملة — منى',d:'المنطقة ٣ · مخيم ١٤',m:'٧٫٢ كم',deg:48,k:'home'},
+ {n:'مخيم عرفات',d:'القطاع ب',m:'١٤ كم',deg:65,k:'home'},
+ {n:'عيادة الحملة',d:'داخل المخيم · ٢٤ ساعة',m:'٩٠ م',deg:15,k:'sos'},
+ {n:'جمرة العقبة',d:'الدور الأول',m:'١٫٨ كم',deg:275,k:'home'},
+];
+let LIVE=null;
+let SIGNED=false;      /* حالة توقيع العقد */
+let MISSING=['رقم الجواز وتاريخ انتهائه','فصيلة الدم','جهة اتصال الطوارئ'];   /* آخر موقع مُشارك من القائد */
 const BUSES=[
  {n:'باص ١',l:'أحمد المالكي',p:'+974 6677 8899',sf:'أمل الكواري',sfp:'+974 3311 7788',t:44,a:44,m:26,f:18},
  {n:'باص ٢',l:'عبدالعزيز السويدي',p:'+974 5511 2233',sf:'سارة النعيمي',sfp:'+974 6655 2211',t:46,a:45,m:25,f:21},
- {n:'باص ٣',l:'ماجد الشمري',p:'+974 5544 3322',sf:'لطيفة الدوسري',sfp:'+974 7744 9922',t:45,a:38,m:24,f:21},
+ {n:'باص ٣',l:'ماجد الشمري',p:'+974 5544 3322',sf:'',sfp:'',t:45,a:38,m:24,f:21},
  {n:'باص ٤',l:'راشد البوعينين',p:'+974 3366 7711',sf:'حصة المري',sfp:'+974 5599 3344',t:44,a:43,m:23,f:21},
- {n:'باص ٥',l:'جاسم الإبراهيم',p:'+974 7788 2200',sf:'موزة السليطي',sfp:'+974 6633 8822',t:47,a:46,m:27,f:20},
+ {n:'باص ٥',l:'جاسم الإبراهيم',p:'+974 7788 2200',sf:'',sfp:'',t:47,a:46,m:27,f:20},
  {n:'باص ٦',l:'طلال المناعي',p:'+974 6600 5533',sf:'العنود المهندي',sfp:'+974 7722 1144',t:46,a:42,m:25,f:21},
  {n:'باص ٧',l:'سعد العتيبي',p:'+974 5090 1297',sf:'نورة المسند',sfp:'+974 5533 7711',t:48,a:46,m:28,f:20},
 ];
@@ -465,6 +520,10 @@ home:()=>{const[p]=nextPray();const now=new Date(),m=now.getHours()*60+now.getMi
     <button class="sp g" onclick="go('qibla')">${IC.comp}القبلة</button>
     <button class="sp" onclick="go('rites')">${IC.rite}المناسك</button>
   </div>
+  ${LIVE?`<div class="c" style="border-color:#EBDCBB;background:var(--gold-l)" onclick="go('places')">
+    <div class="rw"><p class="lb" style="margin:0;color:#7E5E14">تغيّر موقع الباص</p><span class="tag a">منذ ${LIVE.ago}</span></div>
+    <div class="vl" style="font-size:21px;margin-top:5px">${LIVE.dist} · اتجاه ${LIVE.deg}°</div>
+    <div class="vs">${LIVE.note} — اضغط للاتجاه والخريطة</div></div>`:''}
 
   <div class="lead" onclick="oc('${SEX==='m'?'bus':'busf'}')">
     <div class="who"><span class="av">${ME().sup[0]}</span>
@@ -493,11 +552,21 @@ home:()=>{const[p]=nextPray();const now=new Date(),m=now.getHours()*60+now.getMi
     </div>
   </div>
 
+  ${!SIGNED?`<div class="c" style="border-color:#EEC9C9;background:var(--bad-l)" onclick="go('contract')">
+    <div class="rw"><div><div class="t" style="font-size:15.5px;font-weight:600">عقد الحملة بانتظار توقيعك</div>
+      <div class="d" style="font-size:13px;color:var(--mute);margin-top:4px">اقرأه ووقّع بإصبعك · دقيقتان</div></div>
+      <span class="go" style="color:var(--bad);font-weight:600;font-size:13px">توقيع ›</span></div>
+  </div>`:''}
   <div class="c" style="border-color:#EEC9C9;background:var(--bad-l)" onclick="go('docs')">
     <div class="rw"><div><div class="t" style="font-size:15.5px;font-weight:600">ينقصك التقرير الطبي</div>
       <div class="d" style="font-size:13px;color:var(--mute);margin-top:4px">٣ من ٤ مستندات مقبولة</div></div>
       <span class="go" style="color:var(--bad);font-weight:600;font-size:13px">رفع ›</span></div>
   </div>
+  ${MISSING.length?`<div class="c" style="border-color:#EBDCBB;background:var(--gold-l)" onclick="go('missing')">
+    <div class="rw"><div><div class="t" style="font-size:15.5px;font-weight:600">ينقص ملفك ${ar(MISSING.length)} بيانات</div>
+      <div class="d" style="font-size:13px;color:#7E5E14;margin-top:4px">${MISSING[0]}${MISSING.length>1?' وغيرها':''}</div></div>
+      <span class="go" style="color:#7E5E14;font-weight:600;font-size:13px">إكمال ›</span></div>
+  </div>`:''}
 
   <div class="mini">
     <div class="mn hot" onclick="go('quiz')"><div class="k">مسابقة ${COMP().aud} · ${COMP().close}</div>
@@ -617,15 +686,20 @@ me:()=>`
     <button class="${SEX==='f'?'on':''}" onclick="setSex('f')">حاجة</button>
   </div>
   <div class="sh"><h3>الدور</h3><em>للعرض التجريبي</em></div>
-  <div class="rolebar" style="display:grid;grid-template-columns:repeat(4,1fr)">
+  <div class="rolebar" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
     <button class="on">حاج</button>
-    <button onclick="setRole('leader')">قائد</button>
-    <button onclick="setRole('admin')">إدارة</button>
-    <button onclick="setRole('mufti')">مفتي</button>
+    <button onclick="setRole('leader')">${SEX==='m'?'قائد':'مشرفة'}</button>
+    <button onclick="setRole('admin')">${SEX==='m'?'إداري':'إدارية'}</button>
+  </div>
+  <div class="rolebar" style="display:grid;grid-template-columns:repeat(2,1fr);gap:6px;margin-top:-6px">
+    <button onclick="setRole('mgr')">مدير الحملة</button>
+    <button onclick="setRole('mufti')">المفتي</button>
   </div>
 
   <div class="sh"><h3>ملفاتي وماليتي</h3><em></em></div>
   <div class="c flat">
+    <div class="it" onclick="go('contract')"><span class="ic ${SIGNED?'g':'r'}">${IC.doc}</span><div><div class="t">عقد الحملة</div><div class="d">${SIGNED?'موقّع · CNT-336-0328':'بانتظار توقيعك'}</div></div><span class="go">${SIGNED?'عرض':'توقيع'} ›</span></div>
+    <div class="it" onclick="go('missing')"><span class="ic ${MISSING.length?'a':'g'}">${IC.card}</span><div><div class="t">بيانات ملفي</div><div class="d">${MISSING.length?'ناقص '+ar(MISSING.length)+' بيانات':'مكتملة'}</div></div><span class="go">›</span></div>
     <div class="it" onclick="go('docs')"><span class="ic r">${IC.doc}</span><div><div class="t">مستنداتي</div><div class="d">٣ من ٤ مقبولة · ناقص التقرير الطبي</div></div><span class="go">›</span></div>
     <div class="it" onclick="go('pay')"><span class="ic g">${IC.money}</span><div><div class="t">المدفوعات</div><div class="d">متبقٍ ٦٬٠٠٠ ريال</div></div><span class="go">›</span></div>
     <div class="it" onclick="go('checklist')"><span class="ic a">${IC.list}</span><div><div class="t">قائمة التجهيزات</div><div class="d">٦ من ١٠ جاهزة</div></div><span class="go">›</span></div>
@@ -765,8 +839,8 @@ lead:()=>{const P=PX();return`
   <div class="rolebar">
     <button onclick="setRole('pilgrim')">${SEX==='m'?'حاج':'حاجة'}</button>
     <button class="on">${SEX==='m'?'قائد':'مشرفة'}</button>
-    <button onclick="setRole('admin')">إدارة</button>
-    <button onclick="setRole('mufti')">مفتي</button>
+    <button onclick="setRole('admin')">${SEX==='m'?'إداري':'إدارية'}</button>
+    <button onclick="setRole('mgr')">المدير</button>
   </div>
   <div class="hero">
     <div class="rw"><p class="lb">باص ٧ · ${SEX==='m'?'كل الأعضاء':'نساء الباص'} · التوجه إلى منى</p><span class="tag w">٤:٣٠</span></div>
@@ -782,6 +856,7 @@ lead:()=>{const P=PX();return`
     <button class="btn" onclick="go('scan')">مسح الحضور</button>
     <button class="btn g" onclick="go('send')">إرسال إشعار</button>
   </div>
+  <button class="btn o" style="margin-top:9px" onclick="go('sendloc')">مشاركة موقع الباص الآن</button>
   <div class="sh"><h3>المتأخرون</h3><em>اتصل بهم</em></div>
   <div class="c flat">
     ${P.filter(p=>p.s==='no').map(p=>`<div class="pax">
@@ -840,18 +915,19 @@ adm:()=>`
   <div class="rolebar" style="display:grid;grid-template-columns:repeat(4,1fr)">
     <button onclick="setRole('pilgrim')">حاج</button>
     <button onclick="setRole('leader')">قائد</button>
-    <button class="on">إدارة</button>
-    <button onclick="setRole('mufti')">مفتي</button>
+    <button class="on">${ASCOPE==='f'?'إدارية':(ASCOPE==='m'?'إداري':'المدير')}</button>
+    <button onclick="setRole('mufti')">المفتي</button>
   </div>
   <div class="hero">
-    <div class="rw"><p class="lb">حملة الحمادي · ١٢ ذو الحجة</p><span class="tag w">٧ باصات</span></div>
-    <div class="vl">٣٠٤ من ٣٢٠ حضروا</div>
-    <div class="vs">١٧٨ رجلاً · ١٤٢ امرأة · التحرك: التوجه إلى منى ٤:٣٠</div>
+    <div class="rw"><p class="lb">حملة الحمادي · ١٢ ذو الحجة</p>
+      <span class="tag w">${ASCOPE==='f'?'نطاقك: النساء':(ASCOPE==='m'?'نطاقك: الرجال':'نطاقك: الحملة كلها')}</span></div>
+    <div class="vl">${ASCOPE==='f'?'١٣٤ من ١٤٢ حضرن':(ASCOPE==='m'?'١٧٠ من ١٧٨ حضروا':'٣٠٤ من ٣٢٠ حضروا')}</div>
+    <div class="vs">${ASCOPE==='all'?'١٧٨ رجلاً · ١٤٢ امرأة · ':''}التحرك: التوجه إلى منى ٤:٣٠</div>
   </div>
   <div class="stat">
     <div class="st bad"><div class="n">${ar(REQS.filter(r=>r.s==='open').length)}</div><div class="l">طلبات جديدة</div></div>
     <div class="st warn"><div class="n">${ar(DOCS.length)}</div><div class="l">مستندات للمراجعة</div></div>
-    <div class="st bad"><div class="n">١٦</div><div class="l">لم يحضروا</div></div>
+    <div class="st bad"><div class="n">٤٥</div><div class="l">لم يوقّعوا</div></div>
   </div>
   <div class="sh"><h3>إجراءات سريعة</h3><em></em></div>
   <div class="quick">
@@ -861,6 +937,8 @@ adm:()=>`
     <button class="qa" onclick="go('upl')">${IC.vid}رفع فيديو</button>
     <button class="qa" onclick="go('buses')">${IC.bus}الباصات</button>
     <button class="qa" onclick="go('mkq')">${IC.quiz}مسابقة</button>
+    <button class="qa" onclick="go('sendloc')">${IC.comp}موقع الباص</button>
+    <button class="qa" onclick="go('sigs')">${IC.doc}العقود</button>
   </div>
   <div class="sh"><h3>الباصات الآن</h3><em onclick="go('buses')" style="color:var(--brand);font-weight:600">الكل ٧ ›</em></div>
   <div class="c flat">
@@ -960,7 +1038,7 @@ upl:()=>`<button class="bk" onclick="go('adm')">› الإدارة</button>
 women:()=>`${bk()}
   <div class="c" style="background:var(--gold-l);border-color:#EBDCBB">
     <div class="t" style="font-size:15.5px;font-weight:600">أحكام تخص المرأة في الحج</div>
-    <div class="d" style="font-size:12.5px;color:#7E5E14;margin-top:4px">مراجعة الشيخة أمل المحمود · مفتية الحملة للنساء</div>
+    <div class="d" style="font-size:12.5px;color:#7E5E14;margin-top:4px">مراجعة مفتي الحملة · الشيخ عبدالرحمن اليوسف</div>
   </div>
   <div class="chipsrow">
     <button class="chip on" onclick="vf(this,'i')">الإحرام</button>
@@ -975,8 +1053,172 @@ women:()=>`${bk()}
     <div class="it"><span class="ic">${IC.quran}</span><div><div class="t">سقوط طواف الوداع عن الحائض</div><div class="d">لا وداع على الحائض ولا فدية عليها</div></div><span class="go">›</span></div>
     <div class="it"><span class="ic">${IC.quran}</span><div><div class="t">التقصير بدل الحلق</div><div class="d">تقصّر من أطراف شعرها قدر أنملة</div></div><span class="go">›</span></div>
   </div>
-  <button class="btn g" onclick="go('ask')">اسألي المفتية سؤالاً خاصاً</button>
+  <button class="btn g" onclick="go('ask')">اسألي المفتي سؤالاً خاصاً</button>
   <p class="mt">محتوى مُعد مسبقاً · ولا يُغني عن السؤال في حالتك الخاصة</p>`,
+
+places:()=>`${bk()}
+  ${LIVE?`<div class="livebox">
+    <div class="k">موقع الباص الآن · حدّثه ${LIVE.by}</div>
+    <div class="v">${LIVE.dist} · ${LIVE.deg}°</div>
+    <div class="s">${LIVE.note||'الباص وقف هنا بسبب المرور'} · منذ ${LIVE.ago}</div>
+    <div class="coord">21.4225° N, 39.8262° E</div>
+    <div class="twobtn" style="margin-top:11px">
+      <button class="btn" style="background:#fff;color:#7E5E14" onclick="toast('فتح خرائط Google للملاحة')">افتح في الخرائط</button>
+      <button class="btn" style="background:rgba(255,255,255,.18)" onclick="toast('نُسخت الإحداثيات')">نسخ الإحداثيات</button>
+    </div></div>`:''}
+  <div class="c" id="navcard" style="text-align:center;padding:18px 16px">
+    <p class="lb">${LIVE?'الاتجاه إلى موقع الباص':'الاتجاه إلى نقطة التجمع'}</p>
+    <svg class="navw" viewBox="0 0 120 120">
+      <circle cx="60" cy="60" r="54" fill="#FCFAFB" stroke="var(--line)" stroke-width="1.5"/>
+      <circle id="nring" cx="60" cy="60" r="54" fill="none" stroke="#C0392B" stroke-width="4"
+        stroke-linecap="round" stroke-dasharray="0 340" transform="rotate(-90 60 60)"/>
+      ${Array.from({length:36},(_,i)=>{const a=i*10*Math.PI/180,m=i%9===0;
+        return `<line x1="${60+Math.sin(a)*(m?44:48)}" y1="${60-Math.cos(a)*(m?44:48)}" x2="${60+Math.sin(a)*52}" y2="${60-Math.cos(a)*52}" stroke="${m?'#A79BA0':'#EDE9EA'}" stroke-width="${m?1.4:1}"/>`}).join('')}
+      <g id="narrow" style="transform-origin:60px 60px;transition:transform .5s cubic-bezier(.25,1.1,.4,1)">
+        <path id="nhead" d="M60 14 L76 72 L60 63 L44 72 Z" fill="#C0392B"/>
+        <path d="M60 63 L76 72 L60 106 L44 72 Z" fill="#E4DCDF"/></g>
+      <circle cx="60" cy="60" r="5" fill="#fff" stroke="#A79BA0" stroke-width="2"/>
+    </svg>
+    <div class="vl" id="ndist">${LIVE?LIVE.dist:'٤٠ متراً'}</div>
+    <div class="vs" id="nsay" style="font-size:16px;font-weight:600;color:var(--ink);margin-top:6px">
+      استدر حتى يصير السهم أخضر</div>
+    <div class="vs" style="margin-top:4px">${LIVE?'موقع الباص المحدَّث':'أمام فندق دار النور'}</div>
+    <div class="twobtn" style="margin-top:13px">
+      <button class="btn g" onclick="turn(-40)">استدر يميناً</button>
+      <button class="btn g" onclick="turn(40)">استدر يساراً</button>
+    </div>
+    <p class="mt" style="margin-top:9px">جرّب الاستدارة — يتغيّر اللون والجملة</p>
+  </div>
+  <div class="sh"><h3>مواقع الحملة</h3><em>محفوظة على جهازك</em></div>
+  <div class="c flat">
+    ${PLACES.map(p=>`<div class="plc" onclick="toast('فتح ${p.n} في الخرائط')">
+      <span class="ar" style="--d:${p.deg}deg"><i style="display:none"></i></span>
+      <div><div class="nm">${p.n}</div><div class="ds">${p.d}</div></div>
+      <span class="ms">${p.m}</span></div>`).join('')}
+  </div>
+  <div class="sh"><h3>مشاركة موقعك</h3><em>اختيارية ومؤقتة</em></div>
+  <div class="c">
+    <div class="t" style="font-size:15px;font-weight:600">شارك موقعك ٣٠ دقيقة</div>
+    <div class="d" style="font-size:13px;color:var(--mute);margin-top:5px;line-height:1.6">
+      يراه قائد باصك والإدارة فقط، ويتوقف وحده بعد المدة. ولا يُجمع موقعك في غير ذلك.</div>
+    <button class="btn" id="shb" style="margin-top:12px" onclick="shareLoc()">ابدأ المشاركة</button>
+  </div>
+  <p class="mt">الاتجاه والمسافة يعملان دون إنترنت · والخرائط تحتاج اتصالاً</p>`,
+
+sendloc:()=>`<button class="bk" onclick="go('${ROLE==='admin'?'adm':'lead'}')">› رجوع</button>
+  <div class="c" style="background:var(--gold-l);border-color:#EBDCBB">
+    <div class="t" style="font-size:16px;font-weight:600">الباص وقف في مكان آخر؟</div>
+    <div class="d" style="font-size:13px;color:#7E5E14;margin-top:5px;line-height:1.6">
+      اضغط الزر وأنت عند الباص. يُلتقط موقعك ويُرسل لحجاجك، فيصلهم سهم ومسافة إليك.</div>
+  </div>
+  <button class="btn" id="lb1" style="margin-top:12px;padding:20px;font-size:17px" onclick="sendLoc()">هنا موقع الباص</button>
+  <div class="c" style="margin-top:11px">
+    <div class="kv"><span class="k2">يصل إلى</span><span class="v2">${ROLE==='admin'?'الباص المختار':'أعضاء باص ٧'}</span></div>
+    <div class="kv"><span class="k2">الدقة</span><span class="v2">± ٨ أمتار</span></div>
+    <div class="kv"><span class="k2">ملاحظة اختيارية</span><span class="v2">________________</span></div>
+  </div>
+  <div class="chipsrow" style="margin-top:10px">
+    <button class="chip on" onclick="vf(this,'a')">بسبب المرور</button>
+    <button class="chip" onclick="vf(this,'b')">موقف بديل</button>
+    <button class="chip" onclick="vf(this,'c')">نقطة لقاء بعد الرمي</button>
+  </div>
+  <div id="lvres"></div>
+  <p class="mt">يبقى الموقع نشطاً حتى توقفه · ويُرسل أيضاً لمجموعة الباص</p>`,
+
+contract:()=>`${bk()}
+  ${SIGNED?`<div class="c" style="background:var(--ok-l);border-color:#CBE5D9">
+    <div class="rw"><div><div class="t" style="font-size:16px;font-weight:600">العقد موقّع</div>
+      <div class="d" style="font-size:13px;color:var(--mute);margin-top:4px">
+        ١٢ ذو الحجة ١٤٤٨ · ٨:٤٠ ص · مرجع CNT-336-0328</div></div>
+      <span class="tag g">مكتمل</span></div>
+    <div class="twobtn" style="margin-top:12px">
+      <button class="btn" onclick="toast('جارٍ تحميل نسخة PDF موقّعة')">تحميل النسخة الموقّعة</button>
+      <button class="btn g" onclick="toast('أُرسلت النسخة على بريدك')">إرسالها لبريدي</button></div>
+  </div>
+  <div class="sh"><h3>بيانات التوقيع</h3><em>محفوظة مع النسخة</em></div>
+  <div class="c">
+    <div class="kv"><span class="k2">الموقّع</span><span class="v2">${ME().nm}</span></div>
+    <div class="kv"><span class="k2">رقم العضوية</span><span class="v2">١٤٤٨-٠٣٢٨</span></div>
+    <div class="kv"><span class="k2">التاريخ والوقت</span><span class="v2">١٢ ذو الحجة · ٨:٤٠ ص</span></div>
+    <div class="kv"><span class="k2">التحقق</span><span class="v2">رمز على ‎+974 5090 1297</span></div>
+    <div class="kv"><span class="k2">مرجع المستند</span><span class="v2">CNT-336-0328</span></div>
+  </div>`:`
+  <div class="c" style="background:var(--bad-l);border-color:#EEC9C9">
+    <div class="t" style="font-size:16px;font-weight:600">عقد الحملة بانتظار توقيعك</div>
+    <div class="d" style="font-size:13px;color:var(--mute);margin-top:5px;line-height:1.6">
+      اقرأ العقد حتى نهايته، ثم وقّع بإصبعك وأدخل رمز التحقق الذي يصلك على جوالك.</div>
+  </div>
+  <div class="sh"><h3>عقد خدمات الحج</h3><em>موسم ١٤٤٨</em></div>
+  <div class="doc" id="dc">
+    <h5>حملة الحمادي للحج والعمرة — عقد خدمة</h5>
+    <p>يلتزم الطرف الأول بتقديم خدمات الحج للطرف الثاني لموسم ١٤٤٨هـ، شاملةً النقل والسكن والإعاشة والإرشاد وفق البرنامج المعتمد.</p>
+    <p>يلتزم الطرف الثاني بتقديم مستنداته كاملة في مواعيدها، والالتزام بمواعيد التحركات وتعليمات قائد الباص والمشرفين.</p>
+    <p>السكن في مكة غرف يحددها الطرف الأول، وفي منى وعرفات مخيمات مفصولة بين الرجال والنساء.</p>
+    <p>يقر الطرف الثاني بصحة بياناته الصحية، ويلتزم بإبلاغ الحملة بأي حالة تستدعي رعاية خاصة.</p>
+    <p>في حال الإلغاء قبل الموسم تُطبَّق سياسة الاسترداد المبينة في الملحق.</p>
+  </div>
+  <div class="prg"><i id="pr"></i></div>
+  <button class="btn g" id="rd" onclick="readDoc()">اقرأ العقد كاملاً</button>
+
+  <div class="sh"><h3>توقيع الحملة</h3><em>جاهز مسبقاً</em></div>
+  <div class="stamp"><span class="sl"><img src="LOGOW"></span>
+    <div><div class="t" style="font-size:14.5px;font-weight:600">حملة الحمادي للحج والعمرة</div>
+      <div class="d" style="font-size:12.5px;color:var(--mute);margin-top:3px">موقّع ومختوم إلكترونياً · ١ ذو القعدة ١٤٤٨</div></div>
+    <span class="tag g" style="margin-inline-start:auto">موثّق</span></div>
+
+  <div class="sh"><h3>توقيعك</h3><em>بإصبعك</em></div>
+  <div class="sig" id="sg" onclick="drawSig()">اضغط هنا ووقّع بإصبعك</div>
+  <button class="btn" id="sb" style="margin-top:11px;opacity:.5" onclick="goOtp()">متابعة للتحقق</button>
+  <p class="mt">توقيعك والرمز معاً يثبتان هويتك · ويُحفظ وقت التوقيع ورقم جوالك مع النسخة</p>`}`,
+
+otp:()=>`<button class="bk" onclick="go('contract')">› العقد</button>
+  <div class="c" style="text-align:center;padding:22px 16px">
+    <div class="t" style="font-size:17px;font-weight:600">أدخل رمز التحقق</div>
+    <div class="d" style="font-size:13.5px;color:var(--mute);margin-top:7px;line-height:1.6">
+      أُرسل رمز من أربعة أرقام إلى<br><b style="direction:ltr;display:inline-block">+974 5090 1297</b></div>
+    <div class="otp"><b>٤</b><b>٩</b><b>٢</b><b>٧</b></div>
+    <button class="btn" onclick="signNow()">تأكيد التوقيع</button>
+    <div class="d" style="font-size:12.5px;color:var(--mute);margin-top:11px">لم يصلك الرمز؟ إعادة الإرسال بعد ٣٠ ثانية</div>
+  </div>
+  <p class="mt">بتأكيدك تقرّ بقراءة العقد والموافقة على بنوده</p>`,
+
+missing:()=>`${bk()}
+  <div class="c"><div class="ring">٧٠٪</div><div class="rt2">اكتمال ملفك<i>ناقص ${ar(MISSING.length)} بيانات</i></div></div>
+  <div class="sh"><h3>بيانات ناقصة</h3><em>أكملها قبل السفر</em></div>
+  <div class="c flat">
+    ${MISSING.map((m,i)=>`<div class="miss" onclick="fillOne(${i},this)">
+      <span class="dt2"></span><div class="t3">${m}</div><span class="go">إكمال ›</span></div>`).join('')}
+    ${MISSING.length===0?'<div class="miss"><span class="dt2" style="background:var(--ok)"></span><div class="t3">اكتملت بياناتك</div></div>':''}
+  </div>
+  <div class="sh"><h3>لماذا نطلبها</h3><em></em></div>
+  <div class="c" style="background:var(--gold-l);border-color:#EBDCBB">
+    <div class="d" style="font-size:13.5px;color:#7E5E14;line-height:1.75">
+      فصيلة الدم وجهة اتصال الطوارئ تُعرض للمشرف في الحالات الطارئة فقط.
+      ورقم الجواز وتاريخ انتهائه لازمان لإجراءات التصاريح.</div>
+  </div>
+  <p class="mt">بياناتك محفوظة مشفّرة · ولا يطّلع عليها إلا المصرح لهم</p>`,
+
+sigs:()=>`<button class="bk" onclick="go('adm')">› الإدارة</button>
+  <div class="c"><div class="ring">٨٦٪</div><div class="rt2">توقيع العقود<i>٢٧٥ وقّعوا · ٤٥ متبقّون</i></div></div>
+  <div class="chipsrow">
+    <button class="chip on" onclick="vf(this,'n')">لم يوقّعوا ٤٥</button>
+    <button class="chip" onclick="vf(this,'y')">وقّعوا ٢٧٥</button>
+    <button class="chip" onclick="vf(this,'m')">بيانات ناقصة ٦٢</button>
+  </div>
+  <button class="btn o" onclick="toast('أُرسل تذكير لـ٤٥ حاجاً')">تذكير جماعي لمن لم يوقّع</button>
+  <div class="sh"><h3>لم يوقّعوا بعد</h3><em>٤٥</em></div>
+  <div class="c flat">
+    <div class="px">ناصر العطية<i>باص ٧ · أُرسل تذكيران</i><em>☎ ✆</em></div>
+    <div class="px">مريم الكعبي<i>باص ٣ · أُرسل تذكير</i><em>☎ ✆</em></div>
+    <div class="px">سلطان العلي<i>باص ٧ · لم يُذكّر بعد</i><em>☎ ✆</em></div>
+  </div>
+  <div class="sh"><h3>بيانات ناقصة</h3><em>٦٢ حاجاً</em></div>
+  <div class="c flat">
+    <div class="it"><span class="ic a">${IC.card}</span><div><div class="t">فصيلة الدم</div><div class="d">ناقصة عند ٣٨ حاجاً</div></div><span class="go">تذكير</span></div>
+    <div class="it"><span class="ic a">${IC.card}</span><div><div class="t">جهة اتصال الطوارئ</div><div class="d">ناقصة عند ٢٩ حاجاً</div></div><span class="go">تذكير</span></div>
+    <div class="it"><span class="ic r">${IC.doc}</span><div><div class="t">تاريخ انتهاء الجواز</div><div class="d">ناقص عند ١٤ حاجاً</div></div><span class="go">تذكير</span></div>
+  </div>
+  <p class="mt">كل نسخة موقّعة محفوظة بمرجعها ووقتها ورقم جوال الموقّع</p>`,
 
 /* ================= ADMIN: buses ================= */
 buses:()=>`<button class="bk" onclick="go('adm')">› الإدارة</button>
@@ -989,7 +1231,7 @@ buses:()=>`<button class="bk" onclick="go('adm')">› الإدارة</button>
     ${BUSES.map((b,i)=>`<div class="it" onclick="openBus(${i})">
       <span class="ic ${b.a===b.t?'g':(b.t-b.a>4?'r':'a')}">${IC.bus}</span>
       <div><div class="t">${b.n} · ${b.l}</div>
-        <div class="d">${ar(b.m)} رجل · ${ar(b.f)} امرأة · ${ar(b.a)} من ${ar(b.t)} حضروا</div></div>
+        <div class="d">${ar(b.m)}ر · ${ar(b.f)}ن · ${ar(b.a)} من ${ar(b.t)} · ${b.sf?'مشرفة: '+b.sf:'بلا مشرفة'}</div></div>
       <span class="go">عرض ›</span></div>`).join('')}
   </div>
   <p class="mt">الباصات مختلطة بقائد ومشرفة نساء · اضغط أي باص لعرض أعضائه</p>`,
@@ -1004,9 +1246,12 @@ bus1:()=>{const b=BUSES[CURBUS];return`<button class="bk" onclick="go('buses')">
     <div class="pax"><span class="av">${b.l[0]}</span>
       <div><div class="nm">${b.l}</div><div class="ph">${b.p} · قائد الباص</div></div>
       <div class="acts">${call(b.p)}${wa(b.p)}</div></div>
-    <div class="pax" style="border:0"><span class="av" style="background:var(--gold-l);color:#7E5E14">${b.sf[0]}</span>
+    ${b.sf?`<div class="pax" style="border:0"><span class="av" style="background:var(--gold-l);color:#7E5E14">${b.sf[0]}</span>
       <div><div class="nm">${b.sf}</div><div class="ph">${b.sfp} · مشرفة النساء</div></div>
-      <div class="acts">${call(b.sfp)}${wa(b.sfp)}</div></div>
+      <div class="acts">${call(b.sfp)}${wa(b.sfp)}</div></div>`
+      :`<div class="pax" style="border:0"><span class="av n2">—</span>
+      <div><div class="nm">بلا مشرفة نساء</div><div class="ph">القائد يتولى الجميع · يرى أرقامهم</div></div>
+      <span class="go" style="color:var(--brand);font-weight:600;font-size:13px">إسناد</span></div>`}
   </div>
   <div class="twobtn">
     <button class="btn" onclick="go('bcast')">إشعار لهذا الباص</button>
@@ -1070,13 +1315,13 @@ mkq:()=>`<button class="bk" onclick="go('adm')">› الإدارة</button>
 ask:()=>`${bk()}
   <div class="c" style="background:var(--gold-l);border-color:#EBDCBB">
     <div class="rw"><div><div class="t" style="font-size:15.5px;font-weight:600">مفتي الحملة</div>
-      <div class="d" style="font-size:12.5px;color:#7E5E14;margin-top:4px">${SEX==='m'?'الشيخ عبدالرحمن اليوسف':'الشيخة أمل المحمود'} · ${SEX==='m'?'يجيب':'تجيب'} خلال ساعة غالباً · محادثة خاصة</div></div>
+      <div class="d" style="font-size:12.5px;color:#7E5E14;margin-top:4px">الشيخ عبدالرحمن اليوسف · يجيب خلال ساعة غالباً · محادثة خاصة</div></div>
       <span class="tag a">متاح</span></div>
   </div>
   <div class="sh"><h3>سؤالك</h3><em>خاص · لا يراه غيره</em></div>
   <div class="chat" id="ch">
     <div class="msg me">هل يجوز أن أوكل غيري في رمي الجمرات لمرضي؟<div class="tm">١٠:٢٠ ص</div></div>
-    <div class="msg them"><div class="who">${SEX==='m'?'الشيخ عبدالرحمن اليوسف':'الشيخة أمل المحمود'}</div>
+    <div class="msg them"><div class="who">الشيخ عبدالرحمن اليوسف</div>
       نعم يجوز التوكيل في الرمي لمن عجز عنه لمرض أو كبر سن، ويرمي الوكيل عن نفسه أولاً ثم عن موكله.
       <div class="tm">١٠:٤٨ ص</div></div>
   </div>
@@ -1102,8 +1347,8 @@ mufti:()=>`
   <div class="rolebar" style="grid-template-columns:repeat(4,1fr);display:grid">
     <button onclick="setRole('pilgrim')">حاج</button>
     <button onclick="setRole('leader')">قائد</button>
-    <button onclick="setRole('admin')">إدارة</button>
-    <button class="on">مفتي</button>
+    <button onclick="setRole('admin')">إداري</button>
+    <button class="on">المفتي</button>
   </div>
   <div class="hero">
     <div class="rw"><p class="lb">مفتي حملة الحمادي</p><span class="tag w">١٢ ذو الحجة</span></div>
@@ -1351,6 +1596,7 @@ trip:()=>`
     <div class="it" onclick="go('groups')"><span class="ic">${IC.chat}</span><div><div class="t">مجموعات التواصل</div><div class="d">٢ رسائل جديدة</div></div><span class="go">›</span></div>
     <div class="it" onclick="go('house')"><span class="ic">${IC.home}</span><div><div class="t">سكني ومخيمي</div><div class="d">مكة · منى · عرفات</div></div><span class="go">›</span></div>
     <div class="it" onclick="go('id')"><span class="ic">${IC.card}</span><div><div class="t">بطاقتي وتذاكري</div><div class="d">باركود الحضور والدخول</div></div><span class="go">›</span></div>
+    <div class="it" onclick="go('places')"><span class="ic ${LIVE?'a':''}">${IC.comp}</span><div><div class="t">المواقع والاتجاهات</div><div class="d">${LIVE?'موقع الباص تغيّر · '+LIVE.dist:'الفندق والمخيم ونقطة التجمع'}</div></div><span class="go">›</span></div>
   </div>
   <p class="mt">كل ما سبق متاح دون إنترنت</p>`,
 
@@ -1423,7 +1669,7 @@ guide:()=>`
     <div class="it" onclick="go('duas')"><span class="ic">${IC.dua}</span><div><div class="t">الأدعية</div><div class="d">دعاء جديد من الإدارة اليوم</div></div><span class="go"><span class="tag a">جديد</span></span></div>
     <div class="it" onclick="go('pray')"><span class="ic a">${IC.clock}</span><div><div class="t">مواقيت الصلاة</div><div class="d">العصر ٣:٢٨ · مكة</div></div><span class="go">›</span></div>
     <div class="it" onclick="go('qibla')"><span class="ic">${IC.comp}</span><div><div class="t">القبلة</div><div class="d">٢٩٣° · ٦٥٠ م</div></div><span class="go">›</span></div>
-    <div class="it" onclick="go('ask')"><span class="ic a">${IC.chat}</span><div><div class="t">اسأل ${SEX==='m'?'المفتي':'المفتي أو المفتية'}</div><div class="d">سؤال خاص · ${SEX==='m'?'الشيخ عبدالرحمن اليوسف':'الشيخة أمل المحمود للنساء'}</div></div><span class="go"><span class="tag g">متاح</span></span></div>
+    <div class="it" onclick="go('ask')"><span class="ic a">${IC.chat}</span><div><div class="t">اسأل المفتي</div><div class="d">سؤال خاص · الشيخ عبدالرحمن اليوسف</div></div><span class="go"><span class="tag g">متاح</span></span></div>
     ${SEX==='f'?`<div class="it" onclick="go('women')"><span class="ic">\${IC.quran}</span><div><div class="t">أحكام تخص المرأة</div><div class="d">الإحرام والطواف والعذر الشرعي</div></div><span class="go">›</span></div>`:''}
   </div>
   <div class="sh"><h3>المناسك</h3><em>٢ من ٥</em></div>
@@ -1473,6 +1719,7 @@ function go(k){
   document.querySelectorAll('.nv button').forEach(b=>b.classList.toggle('on',b.dataset.t===par));
   tick();
   if(k==='chat'){const c=document.getElementById('ch');if(c)c.scrollIntoView({block:'end'})}
+  if(k==='places'){HEAD=140;navPaint()}
   if(k==='quiz'){const t=document.getElementById('qt');let w=100;clearInterval(window._q);
     window._q=setInterval(()=>{w-=1.1;t.style.width=Math.max(0,w)+'%';if(w<=0)clearInterval(window._q)},130)}
 }
@@ -1517,11 +1764,86 @@ function setSex(x){SEX=x;
   const a=document.getElementById('hdav');if(a)a.textContent=ME().ini;
   const n=document.getElementById('hdn');if(n)n.textContent=ME().nm.split(' ').slice(0,1)+' '+ME().nm.split(' ').slice(-1);
   go(cur);toast(x==='m'?'العرض كحاج':'العرض كحاجة')}
+function readDoc(){
+  const d=document.getElementById('dc'),p=document.getElementById('pr'),b=document.getElementById('rd'),
+        sb=document.getElementById('sb');
+  if(!d) return;
+  d.style.maxHeight='none'; d.style.overflow='visible';
+  if(p) p.style.width='100%';
+  if(b){b.textContent='✓ قرأت العقد كاملاً'; b.style.background='#E8F3EE'; b.style.color='#2E7D5B'; b.onclick=null}
+  if(sb) sb.style.opacity='1';
+  window._read=true; toast('يمكنك التوقيع الآن');
+}
+function drawSig(){
+  const g=document.getElementById('sg'); if(!g) return;
+  g.classList.add('on');
+  g.innerHTML='<svg viewBox="0 0 300 120"><path d="M30 86 C62 30, 86 96, 112 58 S160 18, 186 70 S232 94, 268 44" '+
+    'fill="none" stroke="#2E7D5B" stroke-width="4" stroke-linecap="round"/></svg>';
+  window._sig=true; toast('سُجّل توقيعك');
+}
+function goOtp(){
+  if(!window._read){toast('اقرأ العقد كاملاً أولاً');return}
+  if(!window._sig){toast('وقّع بإصبعك أولاً');return}
+  go('otp');
+}
+function signNow(){ SIGNED=true; go('contract'); toast('تم توقيع العقد — حُفظت نسختك'); }
+function fillOne(i,el){
+  MISSING.splice(i,1);
+  if(el){el.querySelector('.dt2').style.background='#2E7D5B';
+    el.querySelector('.go').textContent='✓ تم'; el.onclick=null}
+  toast('حُفظت البيانات');
+}
+let HEAD=140;                 /* زاوية الجهاز التجريبية */
+function navSay(d){
+  const a=((d%360)+360)%360, b=a>180?a-360:a, x=Math.abs(b);
+  if(x<12) return 'أمامك مباشرة';
+  if(x<45) return b>0?'أمامك قليلاً إلى اليمين':'أمامك قليلاً إلى اليسار';
+  if(x<110) return b>0?'إلى يمينك':'إلى يسارك';
+  if(x<160) return b>0?'خلفك إلى اليمين':'خلفك إلى اليسار';
+  return 'خلفك تماماً — استدر';
+}
+function navPaint(){
+  const tgt = LIVE?LIVE.deg:200;
+  const d = tgt - HEAD, a=((d%360)+360)%360, b=a>180?a-360:a, x=Math.abs(b);
+  const g=document.getElementById('narrow'), h=document.getElementById('nhead'),
+        r=document.getElementById('nring'), say=document.getElementById('nsay'),
+        dist=document.getElementById('ndist');
+  if(!g) return;
+  g.style.transform='rotate('+b+'deg)';
+  const col = x<12 ? '#2E7D5B' : (x<45 ? '#C8921A' : '#C0392B');
+  h.setAttribute('fill',col);
+  if(r){ const p=Math.max(0,1-x/180); r.setAttribute('stroke',col);
+         r.setAttribute('stroke-dasharray',(p*339).toFixed(0)+' 339'); }
+  if(say){ say.textContent = navSay(d) + (x<12?' · امشِ':''); say.style.color = col; }
+  if(dist) dist.style.color = col;
+}
+function turn(deg){ HEAD=(HEAD+deg+360)%360; navPaint();
+  const t=document.getElementById('nsay'); if(t&&t.textContent.includes('امشِ')) toast('اتجاهك صحيح — امشِ'); }
+function sendLoc(){
+  const b=document.getElementById('lb1'); if(!b) return;
+  LIVE={by:ROLE==='admin'?'الإدارة':'سعد العتيبي',dist:'١٤٠ متراً',deg:318,ago:'لحظات',
+        note:'الباص وقف هنا بسبب المرور'};
+  b.textContent='✓ أُرسل الموقع لحجاج الباص'; b.style.background='#2E7D5B';
+  const r=document.getElementById('lvres');
+  if(r) r.innerHTML=`<div class="c" style="margin-top:11px;background:var(--ok-l);border-color:#CBE5D9">
+      <div class="t" style="font-size:15px;font-weight:600">الموقع نشط الآن</div>
+      <div class="d" style="font-size:13px;color:var(--mute);margin-top:5px">وصل ٤٦ من ٤٨ · ويظهر عندهم سهم ومسافة</div>
+      <button class="btn g" style="margin-top:11px" onclick="stopLoc(this)">إيقاف المشاركة</button></div>`;
+  toast('أُرسل موقع الباص لأعضائه');
+}
+function stopLoc(el){ LIVE=null; el.parentElement.innerHTML=
+  '<div class="t" style="font-size:15px;font-weight:600">أُوقفت المشاركة</div>'+
+  '<div class="d" style="font-size:13px;color:var(--mute);margin-top:5px">لن يظهر الموقع بعد الآن لأحد</div>';
+  toast('أُوقفت مشاركة الموقع'); }
+function shareLoc(){ const b=document.getElementById('shb'); if(!b) return;
+  let m=30; b.style.background='#2E7D5B'; b.textContent='يُشارك موقعك · '+ar(m)+' دقيقة متبقية';
+  toast('بدأت المشاركة · تتوقف وحدها بعد ٣٠ دقيقة'); }
 function setRole(r){
   ROLE=r;
   const nav=document.querySelector('.nv');
   if(r==='leader'){nav.style.display='none';go('lead')}
-  else if(r==='admin'){nav.style.display='none';go('adm')}
+  else if(r==='admin'){ASCOPE=(SEX==='f'?'f':'m');ROLE='admin';nav.style.display='none';go('adm')}
+  else if(r==='mgr'){ASCOPE='all';ROLE='admin';nav.style.display='none';go('adm')}
   else if(r==='mufti'){nav.style.display='none';go('mufti')}
   else{nav.style.display='';go('me')}
 }
